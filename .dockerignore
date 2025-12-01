@@ -5,7 +5,7 @@ build
 .git
 .gitignore
 README.md
-.env
+#.env
 .env.local
 .env.*.local
 .vscode
