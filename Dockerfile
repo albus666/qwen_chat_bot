@@ -26,7 +26,12 @@ COPY . .
 # 设置环境变量限制构建时的资源使用
 ENV NODE_ENV=production
 ENV VITE_MAX_WORKERS=1
-RUN pnpm run build
+# 限制 Vite 的并发处理
+ENV NODE_OPTIONS="--max-old-space-size=1536 --max-semi-space-size=128"
+# 禁用一些可能占用内存的功能
+ENV CI=true
+# 使用单线程构建，避免内存峰值
+RUN pnpm run build 2>&1 | tee /tmp/build.log || (cat /tmp/build.log && exit 1)
 
 # Production stage
 FROM docker.1ms.run/library/node:22-alpine

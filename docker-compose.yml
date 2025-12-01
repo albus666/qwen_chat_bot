@@ -3,10 +3,10 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-      # 限制构建时的资源使用（针对2核2G服务器）
+      # Limit build resources for 2-core 2GB server
       args:
         - BUILDKIT_INLINE_CACHE=1
-    # 限制容器运行时资源
+    # Limit container runtime resources
     deploy:
       resources:
         limits:
@@ -21,10 +21,8 @@ services:
     environment:
       # DashScope API Configuration (Qwen3)
       - DASHSCOPE_API_KEY=${DASHSCOPE_API_KEY}
-      
       # Node Environment
       - NODE_ENV=production
-    
     restart: unless-stopped
     healthcheck:
       test: ["CMD", "node", "-e", "require('http').get('http://localhost:3000', (r) => {if (r.statusCode !== 200) throw new Error(r.statusCode)})"]
@@ -32,11 +30,9 @@ services:
       timeout: 10s
       retries: 3
       start_period: 5s
-    
     # Optional: Mount volumes for logs and data
     volumes:
       - ./logs:/app/logs
-    
     # Optional: Network configuration
     networks:
       - qwen3-network
