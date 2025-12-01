@@ -3,6 +3,18 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+      # 限制构建时的资源使用（针对2核2G服务器）
+      args:
+        - BUILDKIT_INLINE_CACHE=1
+    # 限制容器运行时资源
+    deploy:
+      resources:
+        limits:
+          cpus: '2'
+          memory: 2G
+        reservations:
+          cpus: '1'
+          memory: 1G
     container_name: qwen3-chat-bot
     ports:
       - "4399:3000"

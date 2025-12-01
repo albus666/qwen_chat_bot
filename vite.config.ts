@@ -23,6 +23,24 @@ export default defineConfig({
   build: {
     outDir: path.resolve(import.meta.dirname, "dist/public"),
     emptyOutDir: true,
+    // 优化构建配置，减少内存占用（针对低配置服务器）
+    minify: "esbuild", // 使用 esbuild 而不是 terser，更快且内存占用更少
+    chunkSizeWarningLimit: 1000, // 提高 chunk 大小警告阈值
+    rollupOptions: {
+      output: {
+        // 手动分割代码块，减少单次处理的内存占用
+        manualChunks: {
+          'vendor-react': ['react', 'react-dom'],
+          'vendor-ui': ['@radix-ui/react-dialog', '@radix-ui/react-dropdown-menu'],
+        },
+      },
+    },
+    // 限制并发任务数
+    ...(process.env.VITE_MAX_WORKERS ? { 
+      esbuild: { 
+        target: 'es2020',
+      } 
+    } : {}),
   },
   server: {
     host: true,

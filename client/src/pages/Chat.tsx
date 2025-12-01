@@ -469,6 +469,7 @@ export default function Chat() {
     }
   };
 
+
   return (
     <div className="h-screen flex bg-gradient-to-br from-slate-50 to-slate-100">
       {/* Sidebar */}
